@@ -70,7 +70,7 @@ class MakeRequest extends MakeCommand
 
     protected function buildClass($name): MakeRequest|string
     {
-        $stub = $this->getStub();
+        $stub = $this->files->get($this->getStub());
 
         return $this->replaceNamespace($stub, $name)->replaceClass(
             $this->replaceMethod($stub, $this->option('method')),

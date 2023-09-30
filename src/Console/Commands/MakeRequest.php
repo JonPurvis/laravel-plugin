@@ -68,16 +68,28 @@ class MakeRequest extends MakeCommand
         $input->setOption('method', $methodType);
     }
 
+    /**
+     * Build the class with the given name.
+     *
+     * @param  string  $name
+     * @return string
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     protected function buildClass($name): MakeRequest|string
     {
         $stub = $this->files->get($this->getStub());
+        $stub = $this->replaceMethod($stub, $this->option('method'));
 
-        return $this->replaceNamespace($stub, $name)->replaceClass(
-            $this->replaceMethod($stub, $this->option('method')),
-            $name
-        );
+        return $this->replaceNamespace($stub, $name)->replaceClass($stub, $name);
     }
 
+    /**
+     * Replace the method for the stub
+     * @param $stub
+     * @param $name
+     * @return string
+     */
     protected function replaceMethod($stub, $name): string
     {
         return str_replace('{{ method }}', $name, $stub);
